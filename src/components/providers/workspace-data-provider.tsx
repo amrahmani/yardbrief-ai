@@ -19,10 +19,8 @@ import {
   resetAllLocalData,
   writeAppSettings,
 } from "@/lib/app-settings-store";
-import { mockProjects } from "@/lib/mock-data";
 import {
   LOCAL_PROJECTS_EVENT,
-  mergeProjects,
   readLocalProjects,
   saveProjectToLocalStore,
 } from "@/lib/project-store";
@@ -259,10 +257,10 @@ export function WorkspaceDataProvider({
     }
 
     if (!localReady) {
-      return mockProjects;
+      return [];
     }
 
-    return mergeProjects(localProjects);
+    return localProjects;
   }, [cloudProjects, localProjects, localReady, mode]);
   const settings = mode === "cloud" ? cloudSettings : localSettings;
   const subscription = mode === "cloud" ? cloudSubscription : localSubscription;

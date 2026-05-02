@@ -113,19 +113,19 @@ function AuthPageContent({ initialMessage }: { initialMessage: string }) {
     <div className="space-y-6">
       <PageIntro
         eyebrow="Authentication"
-        title="Sign in when you want Supabase sync, or keep using demo mode."
-        description="YardBrief stays fully usable in local demo mode. Supabase only takes over after you choose to sign in."
+        title="Sign in to access your Supabase-backed YardBrief workspace."
+        description="Authentication unlocks your synced projects, site visits, reports, and subscription usage. Demo mode still stays available when you want a local-only walkthrough."
         highlights={[
           "Email/password or magic link",
-          "Demo mode stays available",
-          "Local data syncs after sign-in",
+          "Supabase-backed workspace",
+          "Optional local demo mode",
         ]}
         actions={
           <Link
             href="/dashboard"
             className="yb-button yb-button-secondary"
           >
-            Continue in Demo Mode
+            Try Demo Mode
           </Link>
         }
       />
@@ -146,7 +146,7 @@ function AuthPageContent({ initialMessage }: { initialMessage: string }) {
       <div className="grid gap-6 xl:grid-cols-[1fr,0.96fr]">
         <SectionCard>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone">
-            Supabase access
+            Workspace access
           </p>
 
           {!supabaseConfigured ? (
@@ -162,7 +162,7 @@ function AuthPageContent({ initialMessage }: { initialMessage: string }) {
                 <p className="text-base font-semibold text-charcoal">You are signed in.</p>
                 <p className="mt-2 text-sm leading-7 text-stone">
                   Supabase is active for <span className="font-semibold text-charcoal">{user.email}</span>.
-                  Local demo mode still returns when you sign out.
+                  Demo mode still stays available if you sign out.
                 </p>
               </div>
               <button
@@ -298,8 +298,8 @@ function AuthPageContent({ initialMessage }: { initialMessage: string }) {
             </p>
             <div className="mt-4 space-y-3 text-sm leading-7 text-white/82">
               <p>Email/password auth is available first, with magic link as an optional shortcut.</p>
-              <p>YardBrief syncs your locally created projects, site visits, reports, and settings into Supabase after sign-in.</p>
-              <p>When you sign out, demo mode is still available with local browser data.</p>
+              <p>YardBrief uses Supabase as the active source of truth for your projects, site visits, reports, settings, and usage after sign-in.</p>
+              <p>If you want a local-only walkthrough later, demo mode is still available after sign-out.</p>
             </div>
           </SectionCard>
 

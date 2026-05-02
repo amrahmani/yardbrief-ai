@@ -347,6 +347,14 @@ function mapPhotoRowToPhoto(row: PhotoRow): SitePhotoPlaceholder {
   };
 }
 
+function hasExistingUserProfile(row: UserRow | null) {
+  return Boolean(row?.id);
+}
+
+function hasExistingSubscription(row: SubscriptionRow | null) {
+  return Boolean(row?.user_id);
+}
+
 export async function saveSettingsToSupabase(
   supabase: SupabaseClient,
   user: User,
@@ -509,6 +517,23 @@ export async function saveProjectToSupabase(
     }
   }
 
+  const reportIds = project.reports.map((report) => report.id);
+
+  const staleReportsQuery = supabase
+    .from("reports")
+    .delete()
+    .eq("project_id", project.id)
+    .eq("user_id", user.id);
+
+  const { error: staleReportsError } =
+    reportIds.length > 0
+      ? await staleReportsQuery.not("id", "in", `(${reportIds.map((id) => `"${id}"`).join(",")})`)
+      : await staleReportsQuery;
+
+  if (staleReportsError) {
+    throw staleReportsError;
+  }
+
   if (project.reports.length > 0) {
     const { error: reportError } = await supabase.from("reports").upsert(
       project.reports.map((report) => ({
@@ -548,17 +573,30 @@ export async function syncLocalDataToSupabase(args: {
   projects: Project[];
 }) {
   const { supabase, user, settings, subscription, projects } = args;
-  const existingSubscriptionResult = await supabase
-    .from("subscriptions")
-    .select("*")
-    .eq("user_id", user.id)
-    .maybeSingle();
+  const [existingUserResult, existingSubscriptionResult, existingProjectsResult] =
+    await Promise.all([
+      supabase.from("users").select("*").eq("id", user.id).maybeSingle(),
+      supabase.from("subscriptions").select("*").eq("user_id", user.id).maybeSingle(),
+      supabase.from("projects").select("id").eq("user_id", user.id),
+    ]);
+
+  if (existingUserResult.error) {
+    throw existingUserResult.error;
+  }
 
   if (existingSubscriptionResult.error) {
     throw existingSubscriptionResult.error;
   }
 
+  if (existingProjectsResult.error) {
+    throw existingProjectsResult.error;
+  }
+
+  const existingUser = (existingUserResult.data as UserRow | null) ?? null;
   const existingSubscription = (existingSubscriptionResult.data as SubscriptionRow | null) ?? null;
+  const existingProjectIds = new Set(
+    ((existingProjectsResult.data ?? []) as Array<{ id: string }>).map((project) => project.id),
+  );
   const shouldPreserveStripeSubscription =
     Boolean(existingSubscription?.stripe_customer_id) ||
     Boolean(existingSubscription?.stripe_subscription_id) ||
@@ -569,15 +607,24 @@ export async function syncLocalDataToSupabase(args: {
     ? mapSubscriptionRowToState(existingSubscription)
     : subscription;
 
-  await saveSettingsToSupabase(supabase, user, settings);
-  await saveSubscriptionToSupabase(
-    supabase,
-    user,
-    subscriptionToPersist,
-    settings.reportPreferences.defaultProductType,
-  );
+  if (!hasExistingUserProfile(existingUser)) {
+    await saveSettingsToSupabase(supabase, user, settings);
+  }
+
+  if (!hasExistingSubscription(existingSubscription)) {
+    await saveSubscriptionToSupabase(
+      supabase,
+      user,
+      subscriptionToPersist,
+      settings.reportPreferences.defaultProductType,
+    );
+  }
 
   for (const project of projects) {
+    if (existingProjectIds.has(project.id)) {
+      continue;
+    }
+
     await saveProjectToSupabase(
       supabase,
       user,
@@ -600,9 +647,21 @@ export async function loadWorkspaceFromSupabase(
         .select("*")
         .eq("user_id", user.id)
         .order("updated_at", { ascending: false }),
-      supabase.from("site_visits").select("*").eq("user_id", user.id),
-      supabase.from("photos").select("*").eq("user_id", user.id),
-      supabase.from("reports").select("*").eq("user_id", user.id),
+      supabase
+        .from("site_visits")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("updated_at", { ascending: false }),
+      supabase
+        .from("photos")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("reports")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("updated_at", { ascending: false }),
     ]);
 
   for (const result of [

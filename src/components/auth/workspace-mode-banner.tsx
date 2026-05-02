@@ -24,12 +24,12 @@ export function WorkspaceModeBanner() {
   return (
     <div className="rounded-[1.9rem] border border-white/75 bg-[linear-gradient(180deg,rgba(255,253,248,0.94),rgba(243,234,219,0.78))] px-5 py-4 shadow-[0_20px_60px_-42px_rgba(23,55,44,0.6)] ring-1 ring-white/45">
       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-stone">
-        Local demo mode
+        Demo mode
       </p>
       <p className="mt-2 text-sm leading-7 text-stone">
         {supabaseConfigured
-          ? "You can keep exploring locally, or sign in to move your browser data into Supabase."
-          : "Authentication is available after Supabase environment variables are configured. Until then, the app stays local-first."}
+          ? "You are in local demo mode right now. Sign in when you want Supabase to become the active workspace data store."
+          : "Authentication becomes available after Supabase environment variables are configured. Until then, the app stays local-only."}
       </p>
       <p className="mt-2 text-sm leading-7 text-stone">
         Privacy-first workflow: use client nicknames, suburb-only location, and review exports before sharing.
@@ -42,7 +42,7 @@ export function WorkspaceModeBanner() {
           href="/auth"
           className="yb-button yb-button-primary mt-4 text-sm"
         >
-          Sign in
+          Sign in to Supabase
         </Link>
       ) : null}
     </div>

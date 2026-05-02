@@ -88,7 +88,7 @@ export function WorkspaceNav() {
             <p className="mt-3 text-sm leading-7 text-stone">
               {mode === "cloud"
                 ? `Supabase active for ${user?.email ?? "your account"}.`
-                : "Demo mode is active. Sign in when you want cloud sync."}
+                : "Demo mode is active. Sign in when you want Supabase-backed workspace data."}
             </p>
             {mode === "cloud" ? (
               <button
