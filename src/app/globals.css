@@ -1,0 +1,316 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f4efe5;
+  --foreground: #1f2522;
+  --surface: #fffdf8;
+  --forest: #215842;
+  --forest-deep: #17372c;
+  --moss: #8caf7d;
+  --beige: #f3eadb;
+  --sand: #e6dac4;
+  --charcoal: #1f2522;
+  --stone: #667069;
+  --line: rgba(31, 37, 34, 0.08);
+  --font-sans-stack: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+  --font-display-stack: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --font-mono-stack: Consolas, "SFMono-Regular", Menlo, monospace;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-forest: var(--forest);
+  --color-forest-deep: var(--forest-deep);
+  --color-moss: var(--moss);
+  --color-beige: var(--beige);
+  --color-sand: var(--sand);
+  --color-charcoal: var(--charcoal);
+  --color-stone: var(--stone);
+  --font-sans: var(--font-sans-stack);
+  --font-display: var(--font-display-stack);
+  --font-mono: var(--font-mono-stack);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(140, 175, 125, 0.18), transparent 30%),
+    radial-gradient(circle at top right, rgba(33, 88, 66, 0.16), transparent 24%),
+    linear-gradient(180deg, #f8f4ec 0%, #f4efe5 45%, #efe7d8 100%);
+  color: var(--foreground);
+  font-family: var(--font-sans-stack);
+  text-wrap: pretty;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+main {
+  min-width: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+::selection {
+  background: rgba(33, 88, 66, 0.2);
+  color: var(--charcoal);
+}
+
+.yb-field {
+  width: 100%;
+  border: 1px solid rgba(31, 37, 34, 0.1);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 0.95rem 1rem;
+  color: var(--charcoal);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.yb-field::placeholder {
+  color: rgba(102, 112, 105, 0.82);
+}
+
+.yb-field:hover {
+  border-color: rgba(33, 88, 66, 0.16);
+}
+
+.yb-field:focus,
+.yb-field:focus-visible {
+  border-color: rgba(33, 88, 66, 0.32);
+  box-shadow: 0 0 0 4px rgba(33, 88, 66, 0.08);
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.yb-textarea {
+  min-height: 7.5rem;
+  resize: vertical;
+}
+
+.yb-button {
+  display: inline-flex;
+  min-height: 3.15rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.85rem 1.15rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.yb-button:hover {
+  transform: translateY(-1px);
+}
+
+.yb-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.66;
+  transform: none;
+}
+
+.yb-button-primary {
+  background: var(--forest);
+  color: #fff;
+  box-shadow: 0 18px 40px -24px rgba(23, 55, 44, 0.78);
+}
+
+.yb-button-primary:hover {
+  background: var(--forest-deep);
+}
+
+.yb-button-secondary {
+  border: 1px solid rgba(31, 37, 34, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--charcoal);
+}
+
+.yb-button-secondary:hover {
+  border-color: rgba(33, 88, 66, 0.18);
+  color: var(--forest);
+}
+
+.yb-button-muted {
+  border: 1px solid rgba(31, 37, 34, 0.08);
+  background: rgba(243, 234, 219, 0.72);
+  color: var(--charcoal);
+}
+
+.yb-button-muted:hover {
+  border-color: rgba(33, 88, 66, 0.14);
+  background: rgba(243, 234, 219, 0.95);
+}
+
+.yb-button-danger {
+  background: #8a3f31;
+  color: #fff;
+  box-shadow: 0 18px 40px -24px rgba(138, 63, 49, 0.6);
+}
+
+.yb-button-danger:hover {
+  background: #733427;
+}
+
+.yb-button-full {
+  width: 100%;
+}
+
+.yb-kicker {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.yb-helper {
+  margin-top: 0.55rem;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--stone);
+}
+
+.yb-meta-tile {
+  border: 1px solid rgba(31, 37, 34, 0.08);
+  border-radius: 1.35rem;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1rem;
+}
+
+.yb-empty-state {
+  border: 1px dashed rgba(31, 37, 34, 0.14);
+  border-radius: 1.7rem;
+  background:
+    radial-gradient(circle at top, rgba(140, 175, 125, 0.11), transparent 60%),
+    rgba(255, 253, 248, 0.9);
+  padding: 1.5rem;
+}
+
+.yb-card-muted {
+  border: 1px solid rgba(31, 37, 34, 0.08);
+  border-radius: 1.5rem;
+  background: rgba(243, 234, 219, 0.58);
+  padding: 1rem;
+}
+
+.yb-surface-soft {
+  border: 1px solid rgba(31, 37, 34, 0.08);
+  border-radius: 1.7rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(243, 234, 219, 0.52));
+  padding: 1rem;
+}
+
+.yb-preview {
+  color: var(--charcoal);
+  font-size: 0.97rem;
+  line-height: 1.9;
+}
+
+.yb-preview > * + * {
+  margin-top: 1rem;
+}
+
+.yb-preview h1 {
+  font-family: var(--font-display-stack);
+  font-size: clamp(1.8rem, 3vw, 2.45rem);
+  line-height: 1.05;
+  color: var(--charcoal);
+}
+
+.yb-preview h2 {
+  padding-top: 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.yb-preview p {
+  white-space: pre-wrap;
+}
+
+.yb-preview ul {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0;
+  list-style: none;
+}
+
+.yb-preview li {
+  position: relative;
+  padding-left: 1.15rem;
+}
+
+.yb-preview li::before {
+  position: absolute;
+  left: 0;
+  top: 0.75rem;
+  height: 0.38rem;
+  width: 0.38rem;
+  border-radius: 999px;
+  background: var(--forest);
+  content: "";
+}
+
+.yb-loading-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.yb-loading-shimmer::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  animation: yb-shimmer 1.25s infinite;
+  content: "";
+}
+
+@keyframes yb-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
